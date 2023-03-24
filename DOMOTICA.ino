@@ -13,10 +13,11 @@ int pinLCD4 = 10;
 int pinLCD5 = 11;
 int pinLCD6 = 12;
 
-//fin/
+LiquidCrystal lcd(7,8,9,10,11,12); //creamos un obj de tipi LiquidCrystal para asi asignarles los pines
 float tempC;
 int Power = 255; //Motor velocity between 0 and 255
 
+//fin/
 void setup() {
 Serial.begin(9600);
 analogReference(DEFAULT);
@@ -24,6 +25,7 @@ pinMode(pinLM35, INPUT);//ENTRADA DEL SENSOR DE TEMPERATURA
 pinMode(MotorForward1,OUTPUT); //salida
 pinMode(MotorReverse1,OUTPUT); //salida
 pinMode(enableBridge1,INPUT); //input
+lcd.begin(16,2); //iniciamos la pantalla y le indicamos el tamaño (#columnas, #lineas )
 }
 
 void loop() {
@@ -32,9 +34,12 @@ tempC= analogRead(pinLM35);
 int temperatura;
 temperatura= ((tempC * 5 / 1024) / 0.01);
 Serial.print(temperatura);
+lcd.setCursor(0,0); //la linea donde queremos escribir
+lcd.print(temperatura);
+lcd.print("° Celcios."); //imprimimos en la pantalla
 Serial.print("\n");
 delay(2000);
- digitalWrite(enableBridge1,HIGH); // Activo puenteH
+digitalWrite(enableBridge1,HIGH); // Activo puenteH
   // movimiento hacia adelantre
   analogWrite(MotorReverse1,0);
   analogWrite(MotorForward1,Power);
